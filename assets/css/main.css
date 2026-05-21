@@ -279,13 +279,16 @@ body {
   z-index: 1000;
   display: none;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   background: #4700FF;
   border: none;
-  padding: 8px 14px;
+  padding: 8px 20px;
   border-radius: 4px;
   cursor: none;
   color: #fff;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 28px;
+  text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -406,7 +409,9 @@ body {
   }
 
   .close-btn {
-    padding: 4px 8px;
+    padding: 4px 14px;
+    gap: 6px;
+    font-size: 18px;
   }
 
   .close-btn svg {
