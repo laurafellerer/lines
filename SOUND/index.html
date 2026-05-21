@@ -11,7 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100%;
+    min-height: 100vh;
     font-family: system-ui, sans-serif;
     padding: 20px;
   }
@@ -140,6 +140,7 @@ function boot() {
 }
 
 document.addEventListener('click', boot);
+document.querySelector('svg').addEventListener('click', boot);
 
 const notes = [];
 document.querySelectorAll('.note').forEach(el => {
