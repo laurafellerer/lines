@@ -351,6 +351,8 @@ body {
   position: relative;
   width: 960px;
   max-width: 92vw;
+  aspect-ratio: 1000 / 620;
+  min-height: fit-content;
   margin: 40px auto;
   display: flex;
   align-items: center;
