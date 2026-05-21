@@ -113,16 +113,6 @@ let audioContext, analyser, dataArray;
 let isSoundActive = false;
 let silenceTimer = null;
 
-let micStream = null;
-
-async function getMic() {
-  try {
-    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  } catch (e) {
-    console.error('Mic access denied:', e);
-  }
-}
-
 function getVolume() {
   if (!analyser) return 0;
   analyser.getByteFrequencyData(dataArray);
@@ -133,26 +123,25 @@ function getVolume() {
 
 const STAFF_CY = 576;
 
-function boot() {
+async function boot() {
   if (audioContext) return;
-  if (!micStream) {
-    getMic().then(() => {
-      if (micStream) boot();
-      else setTimeout(boot, 500);
-    });
-    return;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    animate();
+  } catch (e) {
+    console.error('Mic access denied:', e);
   }
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  const source = audioContext.createMediaStreamSource(micStream);
-  analyser = audioContext.createAnalyser();
-  analyser.fftSize = 256;
-  source.connect(analyser);
-  dataArray = new Uint8Array(analyser.frequencyBinCount);
-  animate();
 }
 
 document.addEventListener('click', boot, { once: true });
 document.addEventListener('keydown', boot, { once: true });
+document.addEventListener('touchstart', boot, { once: true });
 
 const notes = [];
 document.querySelectorAll('.note').forEach(el => {
