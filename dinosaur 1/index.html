@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hand Wireframe</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; background: #111; color: #eee; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+.toolbar { background: #1a1a2e; padding: 8px 16px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid #333; flex-shrink: 0; flex-wrap: wrap; }
+.toolbar button { padding: 6px 16px; border: 1px solid #444; background: #222; color: #eee; border-radius: 4px; cursor: pointer; font-size: 13px; }
+.toolbar button:hover { background: #333; }
+.toolbar button.active { background: #e94560; border-color: #e94560; }
+.toolbar .spacer { flex: 1; }
+.toolbar .status { font-size: 12px; color: #888; display: flex; align-items: center; gap: 6px; }
+.toolbar .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.toolbar .dot.green { background: #4ecca3; }
+.toolbar .dot.red { background: #e94560; }
+
+.main-area { flex: 1; display: flex; position: relative; overflow: hidden; }
+
+canvas { flex: 1; display: block; background: #111; }
+
+.side-panel { position: absolute; right: 0; top: 0; bottom: 0; width: 260px; background: #1a1a2e; border-left: 1px solid #333; padding: 12px; overflow-y: auto; display: none; flex-direction: column; gap: 6px; z-index: 10; }
+.side-panel.visible { display: flex; }
+.side-panel h3 { font-size: 13px; color: #e94560; margin-bottom: 4px; }
+.side-panel .conn-item { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 6px; background: #222; border-radius: 3px; }
+.side-panel .conn-item button { background: none; border: none; color: #e94560; cursor: pointer; font-size: 14px; padding: 0 4px; }
+.side-panel #model-canvas { width: 100%; flex: 1; min-height: 200px; border-radius: 6px; background: #151515; cursor: pointer; touch-action: none; }
+
+.camera-overlay { position: absolute; bottom: 12px; left: 12px; width: 180px; height: 135px; border-radius: 8px; overflow: hidden; border: 2px solid #333; z-index: 5; display: none; }
+.camera-overlay.visible { display: block; }
+.camera-overlay video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+
+#trails-indicator { display: none; color: #4ecca3; font-size: 12px; }
+#trails-indicator.on { display: inline; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button id="btn-connect" data-mode="connect">Connect</button>
+  <button id="btn-animate" data-mode="animate">Animate</button>
+  <button id="btn-swipe" data-mode="swipe">Swipe</button>
+  <button id="btn-read" data-mode="read">Read</button>
+  <span class="spacer"></span>
+  <span class="status">
+    <span class="dot red" id="hand-dot"></span>
+    <span id="hand-text">No hand</span>
+  </span>
+  <span class="status">FPS: <span id="fps-display">0</span></span>
+  <span id="trails-indicator">● Trails On</span>
+  <button id="btn-clear-trails" style="display:none">Clear Trails</button>
+  <span id="swipe-counter" style="display:none;color:#fdffaa;font-size:12px">0 swiped</span>
+</div>
+
+<div class="main-area">
+  <canvas id="main-canvas"></canvas>
+
+  <div class="camera-overlay" id="camera-overlay">
+    <video id="webcam" autoplay playsinline muted></video>
+  </div>
+
+  <div class="side-panel" id="side-panel">
+    <h3>Connections</h3>
+    <div id="conn-list"></div>
+    <canvas id="model-canvas"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose-detection"></script>
+
+<script type="module" src="src/app.js"></script>
+</body>
+</html>

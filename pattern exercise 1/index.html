@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vector Pattern Generator</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  padding: 24px;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.sidebar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sidebar label {
+  font-size: 13px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+}
+
+.control-group .value-display {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.control-group input[type="color"] {
+  width: 100%;
+  height: 36px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #4a6cf7;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #3b5de7;
+}
+
+.btn-secondary {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #d8d8d8;
+}
+
+.preview-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+#preview {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+#preview svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <h1>Pattern Generator</h1>
+
+  <div class="control-group">
+    <label for="columns">Columns</label>
+    <input type="range" id="columns" min="10" max="100" value="20" step="1">
+    <span class="value-display" id="columns-value">20</span>
+  </div>
+
+  <div class="control-group">
+    <label for="maxFragment">Max Fragment Length</label>
+    <input type="range" id="maxFragment" min="1" max="50" value="8">
+    <span class="value-display" id="maxFragment-value">8%</span>
+  </div>
+
+  <div class="control-group">
+    <label for="gapHeight">Gap Height</label>
+    <input type="range" id="gapHeight" min="1" max="20" value="5">
+    <span class="value-display" id="gapHeight-value">5%</span>
+  </div>
+
+  <div class="control-group">
+    <label for="thickness">Line Thickness</label>
+    <input type="range" id="thickness" min="0.5" max="3" value="1" step="0.5">
+    <span class="value-display" id="thickness-value">1px</span>
+  </div>
+
+  <div class="control-group">
+    <label for="color">Color</label>
+    <input type="color" id="color" value="#6496ff">
+  </div>
+
+  <div class="control-group">
+    <label for="opacity">Opacity</label>
+    <input type="range" id="opacity" min="0" max="100" value="40">
+    <span class="value-display" id="opacity-value">40%</span>
+  </div>
+
+  <button class="btn btn-primary" id="randomize">Randomize</button>
+  <button class="btn btn-secondary" id="export">Export SVG</button>
+</div>
+
+<div class="preview-area">
+  <div id="preview"></div>
+</div>
+
+<script>
+function getControls() {
+  return {
+    columns: parseInt(document.getElementById('columns').value),
+    maxFragment: parseInt(document.getElementById('maxFragment').value) / 100,
+    gapHeight: parseInt(document.getElementById('gapHeight').value) / 100,
+    thickness: parseFloat(document.getElementById('thickness').value),
+    color: document.getElementById('color').value,
+    opacity: parseInt(document.getElementById('opacity').value) / 100,
+  };
+}
+
+function generateFragments(columns, maxFragment, gapHeight) {
+  const size = 500;
+  const fragments = [];
+  const maxFragPx = maxFragment * size;
+  const gapPx = gapHeight * size;
+  for (let col = 0; col < columns; col++) {
+    const colFrags = [];
+    const allDots = Math.random() < 0.3;
+    let y = 0;
+    while (y < size) {
+      const fragLen = allDots ? 0.5 : Math.max(0.5, Math.random() * maxFragPx);
+      const endY = Math.min(y + fragLen, size);
+      if (endY > y) {
+        colFrags.push({ y1: y, y2: endY });
+      }
+      y = endY + gapPx;
+    }
+    fragments.push(colFrags);
+  }
+  return fragments;
+}
+
+function buildSVG(fragments, thickness, color) {
+  const size = 500;
+  const columns = fragments.length;
+  if (columns === 0) return '';
+  const spacing = size / columns;
+  const halfSpacing = spacing / 2;
+
+  const lineEls = [];
+  fragments.forEach((colFrags, i) => {
+    const x = i * spacing + halfSpacing;
+    colFrags.forEach(({ y1, y2 }) => {
+      lineEls.push(`<line x1="${x.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${color}" stroke-width="${thickness}" stroke-linecap="round"/>`);
+    });
+  });
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">
+  ${lineEls.join('\n  ')}
+</svg>`;
+}
+
+function hexToRgba(hex, opacity) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${opacity})`;
+}
+
+function render() {
+  const { columns, maxFragment, gapHeight, thickness, color, opacity } = getControls();
+  const fragments = generateFragments(columns, maxFragment, gapHeight);
+  const rgba = hexToRgba(color, opacity);
+  const svg = buildSVG(fragments, thickness, rgba);
+  document.getElementById('preview').innerHTML = svg;
+}
+
+function setupControls() {
+  const sliders = [
+    { id: 'columns', format: v => v },
+    { id: 'maxFragment', format: v => v + '%' },
+    { id: 'gapHeight', format: v => v + '%' },
+    { id: 'thickness', format: v => v + 'px' },
+    { id: 'opacity', format: v => v + '%' },
+  ];
+
+  sliders.forEach(({ id, format }) => {
+    const input = document.getElementById(id);
+    const display = document.getElementById(id + '-value');
+    input.addEventListener('input', () => {
+      display.textContent = format(input.value);
+      render();
+    });
+  });
+
+  document.getElementById('color').addEventListener('input', render);
+
+  document.getElementById('randomize').addEventListener('click', render);
+}
+
+setupControls();
+render();
+
+document.getElementById('export').addEventListener('click', () => {
+  const svgEl = document.querySelector('#preview svg');
+  if (!svgEl) return;
+
+  const clone = svgEl.cloneNode(true);
+  const serializer = new XMLSerializer();
+  const svgStr = serializer.serializeToString(clone);
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pattern.svg';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
