@@ -133,11 +133,15 @@ function getVolume() {
 
 const STAFF_CY = 576;
 
-getMic();
-
 function boot() {
-  if (!micStream) { setTimeout(boot, 200); return; }
   if (audioContext) return;
+  if (!micStream) {
+    getMic().then(() => {
+      if (micStream) boot();
+      else setTimeout(boot, 500);
+    });
+    return;
+  }
   audioContext = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioContext.createMediaStreamSource(micStream);
   analyser = audioContext.createAnalyser();
