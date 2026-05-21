@@ -106,7 +106,7 @@
 </div>
 
 <script>
-const THRESHOLD = 0.015;
+const THRESHOLD = 0.04;
 const HOLD_TIME = 200;
 
 let audioContext, analyser, dataArray;
@@ -115,10 +115,10 @@ let silenceTimer = null;
 
 function getVolume() {
   if (!analyser) return 0;
-  analyser.getByteFrequencyData(dataArray);
+  analyser.getByteTimeDomainData(dataArray);
   let sum = 0;
-  for (const v of dataArray) sum += v;
-  return Math.sqrt(sum / dataArray.length) / 255;
+  for (const v of dataArray) sum += Math.abs(v - 128);
+  return sum / dataArray.length / 128;
 }
 
 const STAFF_CY = 576;
@@ -161,15 +161,16 @@ document.querySelectorAll('.note').forEach(el => {
 
 function animateNotes(soundActive) {
   for (const n of notes) {
+    const p = n.p;
     if (soundActive) {
-      const p = n.p;
       n.x += ((Math.random() - 0.5) * p.xRange - n.x) * p.lerpX;
       n.y += (p.yDir * (p.yRange * 0.3 + Math.random() * p.yRange * 0.7) - n.y) * p.lerpY;
       n.rot += ((Math.random() - 0.5) * p.rotRange - n.rot) * p.lerpRot;
     } else {
-      n.x += (0 - n.x) * 0.08;
-      n.y += (0 - n.y) * 0.08;
-      n.rot += (0 - n.rot) * 0.08;
+      const idle = 0.3;
+      n.x += (Math.sin(Date.now() * 0.001 + p.xRange) * idle - n.x) * 0.05;
+      n.y += (Math.cos(Date.now() * 0.0012 + p.yRange) * idle - n.y) * 0.05;
+      n.rot += (Math.sin(Date.now() * 0.0008 + p.rotRange) * 6 - n.rot) * 0.05;
     }
     n.el.setAttribute('transform', `translate(${n.x}, ${n.y}) rotate(${n.rot})`);
   }
