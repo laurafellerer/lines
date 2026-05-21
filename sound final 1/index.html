@@ -28,11 +28,40 @@
   .note {
     transform-origin: center;
   }
+  .start-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .start-overlay span {
+    background: #ff44d0;
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+  }
 </style>
 </head>
 <body>
 
 
+<div class="wrapper">
+<div class="start-overlay" id="startOverlay"><span>Click to enable mic</span></div>
 <div class="container">
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1080 1080" style="overflow: visible">
     <defs>
@@ -104,6 +133,7 @@
     </g>
   </svg>
 </div>
+</div>
 
 <script>
 const THRESHOLD = 0.015;
@@ -127,6 +157,7 @@ async function boot() {
   if (audioContext) return;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    document.getElementById('startOverlay').style.display = 'none';
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const source = audioContext.createMediaStreamSource(stream);
     analyser = audioContext.createAnalyser();
@@ -139,9 +170,7 @@ async function boot() {
   }
 }
 
-document.addEventListener('click', boot, { once: true });
-document.addEventListener('keydown', boot, { once: true });
-document.addEventListener('touchstart', boot, { once: true });
+document.getElementById('startOverlay').addEventListener('click', boot, { once: true });
 
 const notes = [];
 document.querySelectorAll('.note').forEach(el => {
