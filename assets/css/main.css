@@ -285,20 +285,23 @@ body {
   padding: 8px 14px;
   border-radius: 4px;
   cursor: none;
-  transition: background 0.15s ease;
+  color: #fff;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.close-btn img {
-  height: 64px;
+.close-btn svg {
+  height: 36px;
   width: auto;
   display: block;
 }
 
 .close-btn:hover {
+  color: #FF00FF;
   background: #4700FF;
 }
 
 .close-btn:active {
+  color: #fff;
   background: #FF00FF;
 }
 
@@ -406,7 +409,7 @@ body {
     padding: 4px 8px;
   }
 
-  .close-btn img {
-    height: 32px;
+  .close-btn svg {
+    height: 26px;
   }
 }
