@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sound Notes</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    #container {
+      height: 100vh;
+    }
+    svg {
+      display: block;
+      height: 100vh;
+      width: auto;
+      max-width: 100vw;
+    }
+
+    #staff {
+      transform: translate(0, 0);
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #n1 ellipse, #n1 rect,
+    #n2 ellipse, #n2 rect,
+    #n3 ellipse, #n3 rect,
+    #n4 ellipse, #n4 rect,
+    #n5 ellipse, #n5 rect,
+    #n6 ellipse, #n6 rect,
+    #n7 ellipse, #n7 rect,
+    #n8 ellipse, #n8 rect {
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .screaming #staff { transform: translate(0, -164px); }
+
+    .screaming #n1 ellipse { cy: 925.43; ry: 34.57; }
+    .screaming #n1 rect { y: 760.51; height: 167.37; }
+
+    .screaming #n2 ellipse { cy: 919.08; ry: 35.01; }
+    .screaming #n2 rect:first-of-type { y: 752.06; height: 169.5; }
+    .screaming #n2 rect:nth-of-type(2) { y: 752.06; height: 169.5; }
+    .screaming #n2 rect:last-of-type { y: 719.24; height: 30.06; }
+
+    .screaming #n3 ellipse { cy: 804.95; ry: 36.05; }
+    .screaming #n3 rect { y: 632.97; height: 174.54; }
+
+    .screaming #n4 ellipse { cy: 954.1; ry: 40.82; }
+    .screaming #n4 rect { y: 759.38; height: 197.61; }
+
+    .screaming #n5 ellipse { cy: 769.56; ry: 38.8; }
+    .screaming #n5 rect { y: 584.47; height: 187.83; }
+
+    .screaming #n6 ellipse { cy: 991.69; ry: 45.4; }
+    .screaming #n6 rect { y: 775.13; height: 219.78; }
+
+    .screaming #n7 ellipse { cy: 761.5; ry: 49.9; }
+    .screaming #n7 rect:first-of-type { y: 523.47; height: 241.57; }
+    .screaming #n7 rect:nth-of-type(2) { y: 523.47; height: 241.57; }
+    .screaming #n7 rect:last-of-type { y: 476.71; height: 42.84; }
+
+    .screaming #n8 ellipse { cy: 797.5; ry: 44.66; }
+    .screaming #n8 rect { y: 584.47; height: 216.19; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    #s1 polygon, #s2 polygon, #s3 polygon, #s4 polygon, #s5 polygon {
+      animation: twinkle 1.5s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+    .screaming #s1 polygon { animation-delay: 0s; animation-play-state: running; }
+    .screaming #s2 polygon { animation-delay: 0.3s; animation-play-state: running; }
+    .screaming #s3 polygon { animation-delay: 0.6s; animation-play-state: running; }
+    .screaming #s4 polygon { animation-delay: 0.9s; animation-play-state: running; }
+    .screaming #s5 polygon { animation-delay: 1.2s; animation-play-state: running; }
+
+    #error-msg {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font: 1.2rem/1.4 system-ui, sans-serif;
+      padding: 14px 28px;
+      border-radius: 8px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #error-msg.hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <svg viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          .st0 { fill: #050402; }
+          .st0, .st1, .st2 { stroke: #000; stroke-miterlimit: 10; }
+          .st1 { fill: #ff44d0; }
+          .st2 { fill: #ff4462; }
+        </style>
+      </defs>
+      <g id="staff">
+        <rect class="st0" x="539.02" y="401.38" width="1.13" height="1079.5" transform="translate(1480.71 401.55) rotate(90)"/>
+        <rect class="st0" x="539.02" y="416.57" width="1.13" height="1079.5" transform="translate(1495.9 416.74) rotate(90)"/>
+        <rect class="st0" x="539.27" y="431.76" width="1.13" height="1079.5" transform="translate(1511.34 431.68) rotate(90)"/>
+        <rect class="st0" x="539.02" y="446.95" width="1.13" height="1079.5" transform="translate(1526.28 447.12) rotate(90)"/>
+        <rect class="st0" x="539.27" y="462.14" width="1.13" height="1079.5" transform="translate(1541.72 462.05) rotate(90)"/>
+      </g>
+      <g id="n1">
+        <ellipse class="st0" cx="170.12" cy="978.49" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="180" y="924.5" width="1.43" height="54.79"/>
+      </g>
+      <g id="n2">
+        <ellipse class="st0" cx="953.03" cy="947.84" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="962.91" y="893.85" width="1.43" height="54.79"/>
+        <ellipse class="st0" cx="998.94" cy="947.84" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="1008.82" y="893.85" width="1.43" height="54.79"/>
+        <rect class="st0" x="962.91" y="883.24" width="47.35" height="9.72"/>
+      </g>
+      <g id="n3">
+        <ellipse class="st0" cx="864.01" cy="993.68" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="873.89" y="939.69" width="1.43" height="54.79"/>
+      </g>
+      <g id="n4">
+        <ellipse class="st0" cx="703.11" cy="977.37" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="712.99" y="923.37" width="1.43" height="54.79"/>
+      </g>
+      <g id="n5">
+        <ellipse class="st0" cx="542.21" cy="961.03" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="552.09" y="907.04" width="1.43" height="54.79"/>
+      </g>
+      <g id="n6">
+        <ellipse class="st0" cx="381.31" cy="993.12" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="391.19" y="939.13" width="1.43" height="54.79"/>
+      </g>
+      <g id="n7">
+        <ellipse class="st0" cx="259.49" cy="964.07" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="269.37" y="910.08" width="1.43" height="54.79"/>
+        <ellipse class="st0" cx="305.4" cy="964.07" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="315.29" y="910.08" width="1.43" height="54.79"/>
+        <rect class="st0" x="269.37" y="899.47" width="47.35" height="9.72"/>
+      </g>
+      <g id="n8">
+        <ellipse class="st0" cx="80.22" cy="994.83" rx="11.32" ry="11.32"/>
+        <rect class="st0" x="90.1" y="940.84" width="1.43" height="54.79"/>
+      </g>
+      <g id="s1">
+        <polygon class="st1" points="928.05 928.33 910.28 929.89 906.27 947.28 899.29 930.86 881.52 932.42 894.98 920.71 888 904.29 903.3 913.47 916.75 901.76 912.75 919.15 928.05 928.33"/>
+      </g>
+      <g id="s2">
+        <polygon class="st1" points="778.91 1034.3 768.06 1012.45 753.32 1016.47 761.36 998.95 750.51 977.1 766.32 988.12 774.35 970.6 776.09 994.93 791.91 1005.95 777.17 1009.97 778.91 1034.3"/>
+      </g>
+      <g id="s3">
+        <polygon class="st2" points="498.52 948.39 472.53 960.84 477.11 980.79 456.48 968.54 430.5 980.99 443.72 960.97 423.09 948.72 451.9 948.59 465.13 928.57 469.7 948.52 498.52 948.39"/>
+      </g>
+      <g id="s4">
+        <polygon class="st1" points="470.12 951.08 452.35 952.65 448.34 970.03 441.36 953.61 423.59 955.18 437.05 943.47 430.07 927.05 445.37 936.23 458.82 924.52 454.82 941.9 470.12 951.08"/>
+      </g>
+      <g id="s5">
+        <polygon class="st2" points="68.45 957.63 47.52 958.4 42.96 976.64 34.58 958.87 13.65 959.63 29.4 947.88 21.03 930.1 39.14 940.62 54.89 928.87 50.34 947.12 68.45 957.63"/>
+      </g>
+    </svg>
+  </div>
+  <div id="error-msg" class="hidden"></div>
+<script>
+let audioContext = null;
+let analyser = null;
+let dataArray = null;
+let isListening = false;
+let isScreaming = false;
+let quietStartTime = 0;
+let started = false;
+
+const THRESHOLD = 0.25;
+const QUIET_DELAY = 300;
+const FFT_SIZE = 256;
+
+const errorMsg = document.getElementById('error-msg');
+
+function getRMS() {
+  analyser.getByteTimeDomainData(dataArray);
+  let sum = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    const val = (dataArray[i] / 128) - 1;
+    sum += val * val;
+  }
+  return Math.sqrt(sum / dataArray.length);
+}
+
+function listen() {
+  if (!isListening) return;
+  requestAnimationFrame(listen);
+  const rms = getRMS();
+  const now = performance.now();
+  if (rms >= THRESHOLD) {
+    document.body.classList.add('screaming');
+    isScreaming = true;
+    quietStartTime = now;
+  } else if (isScreaming) {
+    if (quietStartTime === 0) {
+      quietStartTime = now;
+    } else if (now - quietStartTime >= QUIET_DELAY) {
+      document.body.classList.remove('screaming');
+      isScreaming = false;
+      quietStartTime = 0;
+    }
+  } else {
+    quietStartTime = 0;
+  }
+}
+
+async function startAudio() {
+  if (started) return;
+  started = true;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = FFT_SIZE;
+    source.connect(analyser);
+    dataArray = new Uint8Array(analyser.fftSize);
+    isListening = true;
+    listen();
+  } catch (err) {
+    started = false;
+    errorMsg.classList.remove('hidden');
+    if (err.name === 'NotFoundError') {
+      errorMsg.textContent = 'No microphone found';
+    } else if (err.name === 'NotAllowedError') {
+      errorMsg.textContent = 'Allow mic in browser settings, then click to retry';
+    } else {
+      errorMsg.textContent = 'Error: ' + err.message;
+    }
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    isListening = false;
+  } else if (audioContext) {
+    isListening = true;
+    listen();
+  }
+});
+
+document.addEventListener('click', startAudio);
+</script>
+</body>
+</html>

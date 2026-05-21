@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Reactive Notes</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f5f0e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: system-ui, sans-serif;
+    padding: 20px;
+  }
+  .container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .note {
+    transform-origin: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-60 200 1200 1400" style="overflow: visible">
+    <defs>
+      <style>
+        .st0 {
+          fill: #050402;
+          stroke: #000;
+          stroke-miterlimit: 10;
+        }
+      </style>
+    </defs>
+    <g id="lines">
+      <rect class="st0" x="539.37" y="389.64" width="1.13" height="1079.5" transform="translate(1469.32 389.45) rotate(90)"/>
+      <rect class="st0" x="539.37" y="404.83" width="1.13" height="1079.5" transform="translate(1484.51 404.64) rotate(90)"/>
+      <rect class="st0" x="539.62" y="420.02" width="1.13" height="1079.5" transform="translate(1499.95 419.58) rotate(90)"/>
+      <rect class="st0" x="539.37" y="435.21" width="1.13" height="1079.5" transform="translate(1514.89 435.02) rotate(90)"/>
+      <rect class="st0" x="539.62" y="450.39" width="1.13" height="1079.5" transform="translate(1530.33 449.96) rotate(90)"/>
+    </g>
+    <g id="n1" class="note">
+      <circle class="st0" cx="80.57" cy="983.09" r="11.32"/>
+      <rect class="st0" x="90.45" y="929.1" width="1.43" height="54.79"/>
+    </g>
+    <g id="n2" class="note">
+      <circle class="st0" cx="170.47" cy="966.75" r="11.32"/>
+      <rect class="st0" x="180.35" y="912.76" width="1.43" height="54.79"/>
+    </g>
+    <g id="n3" class="note">
+      <circle class="st0" cx="259.84" cy="952.33" r="11.32"/>
+      <rect class="st0" x="269.73" y="898.34" width="1.43" height="54.79"/>
+      <circle class="st0" cx="305.76" cy="952.33" r="11.32"/>
+      <rect class="st0" x="315.64" y="898.34" width="1.43" height="54.79"/>
+      <rect class="st0" x="269.73" y="887.73" width="47.35" height="9.72"/>
+    </g>
+    <g id="n4" class="note">
+      <circle class="st0" cx="381.66" cy="981.38" r="11.32"/>
+      <rect class="st0" x="391.54" y="927.38" width="1.43" height="54.79"/>
+    </g>
+    <g id="n5" class="note">
+      <circle class="st0" cx="542.56" cy="949.29" r="11.32"/>
+      <rect class="st0" x="552.44" y="895.29" width="1.43" height="54.79"/>
+    </g>
+    <g id="n6" class="note">
+      <circle class="st0" cx="703.46" cy="965.62" r="11.32"/>
+      <rect class="st0" x="713.34" y="911.63" width="1.43" height="54.79"/>
+    </g>
+    <g id="n7" class="note">
+      <circle class="st0" cx="864.36" cy="981.94" r="11.32"/>
+      <rect class="st0" x="874.25" y="927.95" width="1.43" height="54.79"/>
+    </g>
+    <g id="n8" class="note">
+      <circle class="st0" cx="953.38" cy="936.1" r="11.32"/>
+      <rect class="st0" x="963.27" y="882.1" width="1.43" height="54.79"/>
+      <circle class="st0" cx="999.29" cy="936.1" r="11.32"/>
+      <rect class="st0" x="1009.18" y="882.1" width="1.43" height="54.79"/>
+      <rect class="st0" x="963.27" y="871.5" width="47.35" height="9.72"/>
+    </g>
+  </svg>
+</div>
+<script>
+const THRESHOLD = 0.015;
+const HOLD_TIME = 200;
+
+let audioContext, analyser, dataArray;
+let isSoundActive = false;
+let silenceTimer = null;
+
+async function initAudio() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+  } catch (e) {
+    console.error('Mic access denied:', e);
+  }
+}
+
+function getVolume() {
+  if (!analyser) return 0;
+  analyser.getByteFrequencyData(dataArray);
+  let sum = 0;
+  for (const v of dataArray) sum += v;
+  const rms = Math.sqrt(sum / dataArray.length) / 255;
+  return rms;
+}
+
+initAudio();
+
+const notes = [];
+document.querySelectorAll('.note').forEach((el, i) => {
+  const state = { el, x: 0, y: 0, rot: 0 };
+  // Each note gets a random personality
+  state.personality = {
+    yDir: (Math.random() - 0.5) * 2,
+    yRange: 150 + Math.random() * 250,
+    xRange: 120 + Math.random() * 230,
+    rotRange: (Math.random() - 0.5) * 100,
+    lerpX: 0.04 + Math.random() * 0.08,
+    lerpY: 0.04 + Math.random() * 0.08,
+    lerpRot: 0.06 + Math.random() * 0.1,
+  };
+  notes.push(state);
+});
+
+function animateNotes(soundActive) {
+  for (const n of notes) {
+    if (soundActive) {
+      const p = n.personality;
+      const targetX = (Math.random() - 0.5) * p.xRange;
+      const targetY = p.yDir * (p.yRange * 0.3 + Math.random() * p.yRange * 0.7);
+      const targetRot = (Math.random() - 0.5) * p.rotRange;
+      n.x += (targetX - n.x) * p.lerpX;
+      n.y += (targetY - n.y) * p.lerpY;
+      n.rot += (targetRot - n.rot) * p.lerpRot;
+    } else {
+      n.x += (0 - n.x) * 0.08;
+      n.y += (0 - n.y) * 0.08;
+      n.rot += (0 - n.rot) * 0.08;
+    }
+    n.el.setAttribute('transform', `translate(${n.x}, ${n.y}) rotate(${n.rot})`);
+  }
+}
+
+function animate() {
+  const volume = getVolume();
+  if (volume > THRESHOLD) {
+    if (!isSoundActive) {
+      isSoundActive = true;
+    }
+    clearTimeout(silenceTimer);
+    silenceTimer = null;
+  } else if (isSoundActive && !silenceTimer) {
+    silenceTimer = setTimeout(() => {
+      isSoundActive = false;
+    }, HOLD_TIME);
+  }
+
+  animateNotes(isSoundActive);
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
