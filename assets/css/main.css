@@ -237,7 +237,7 @@ body {
   font-family: 'Instrument Sans', sans-serif;
   font-size: clamp(24px, 2.5rem, 2.5rem);
   font-weight: 400;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   color: #000;
 }
 
@@ -245,6 +245,7 @@ body {
   font-family: 'Instrument Sans', sans-serif;
   font-size: clamp(16px, 1.3rem, 1.3rem);
   font-weight: 400;
+  margin-top: 1.5em;
   margin-bottom: 20px;
   color: #333;
 }
@@ -254,7 +255,7 @@ body {
   font-size: clamp(14px, 1.1rem, 1.1rem);
   font-weight: 400;
   font-style: italic;
-  line-height: 1.8;
+  line-height: 1.4;
   color: #333;
 }
 
