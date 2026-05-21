@@ -139,6 +139,7 @@ function boot() {
   }).catch(e => console.error('Mic denied:', e));
 }
 
+boot();
 document.addEventListener('click', boot);
 document.querySelector('svg').addEventListener('click', boot);
 
