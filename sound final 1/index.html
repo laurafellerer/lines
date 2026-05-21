@@ -125,18 +125,20 @@ const STAFF_CY = 576;
 
 function boot() {
   if (audioContext) return;
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioContext.createMediaStreamSource(stream);
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 256;
-    source.connect(analyser);
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const source = ctx.createMediaStreamSource(stream);
+    const node = ctx.createAnalyser();
+    node.fftSize = 256;
+    source.connect(node);
+    analyser = node;
+    audioContext = ctx;
+    dataArray = new Uint8Array(node.frequencyBinCount);
+    if (ctx.state === 'suspended') ctx.resume();
     animate();
   }).catch(e => console.error('Mic denied:', e));
 }
 
-boot();
 document.addEventListener('click', boot);
 
 const notes = [];
