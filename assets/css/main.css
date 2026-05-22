@@ -116,6 +116,18 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
+#exercise5Btn {
+  position: relative;
+}
+
+#exercise5Btn svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .dropdown-item:last-child {
   margin-bottom: 0;
 }
@@ -342,7 +354,7 @@ body {
 
 .exercise-page .exercise-frame {
   width: 100%;
-  min-height: 75vh;
+  height: 800px;
   border: none;
   display: block;
 }
@@ -378,7 +390,7 @@ body {
 
 .exercise-container .exercise-page .exercise-frame {
   width: 100%;
-  min-height: 75vh;
+  height: 800px;
   border: none;
   display: block;
 }
@@ -576,7 +588,7 @@ body {
   }
 
   .exercise-page .exercise-frame {
-    height: calc(100vh - 160px);
+    height: 800px;
   }
 
   #cursor {
