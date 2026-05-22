@@ -254,21 +254,46 @@ body {
 }
 
 .about-h2 {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: clamp(16px, 1.3rem, 1.3rem);
-  font-weight: 400;
-  margin-top: 1.5em;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.about-h3 {
   font-family: 'Instrument Serif', serif;
   font-size: clamp(14px, 1.1rem, 1.1rem);
   font-weight: 400;
   font-style: italic;
   line-height: 1.4;
   color: #333;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 3rem;
+}
+
+.about-h3 {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: clamp(16px, 1.3rem, 1.3rem);
+  font-weight: 400;
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  line-height: 2rem;
+  color: #333;
+  padding-bottom: 3rem;
+}
+
+.about-h4 {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: clamp(10px, 0.75rem, 0.75rem);
+  line-height: 1.5;
+  color: #555;
+  font-weight: 400;
+  margin-top: 1.8em;
+  margin-bottom: 0;
+}
+
+.about-h5 {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: clamp(10px, 0.75rem, 0.75rem);
+  line-height: 1.5;
+  color: #555;
+  font-weight: 400;
+  margin-top: 0.4em;
+  margin-bottom: 0;
 }
 
 #grain {
