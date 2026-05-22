@@ -230,12 +230,10 @@
     function showSection(id) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      document.getElementById('closeBtn').style.display = id === 'home' ? 'none' : 'block';
     }
 
     document.getElementById('aboutBtn').addEventListener('click', e => { e.preventDefault(); showSection('about'); });
     document.getElementById('exercise2Btn').addEventListener('click', e => { e.preventDefault(); showSection('pattern'); });
-    document.getElementById('closeBtn').addEventListener('click', () => showSection('home'));
     document.addEventListener('keydown', e => { if (e.key === 'Escape') showSection('home'); });
     if (window.location.hash === '#about') showSection('about');
 
